@@ -1,0 +1,12 @@
+@model LoginViewModel
+
+<h3>Login</h3>
+<form asp-action="Login">
+    <div class="form-group">
+        <label for="employeeId">Badge Number</label>
+        <input type="text" class="form-control" id="employeeId" placeholder="EmployeeId" asp-for="EmployeeId"/>
+        <span asp-validation-for="EmployeeId" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Login</button>
+</form>
+
