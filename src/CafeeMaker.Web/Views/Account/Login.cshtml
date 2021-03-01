@@ -5,6 +5,7 @@
         <div className="card-body">
             <h3>Login</h3>
             <form asp-action="Login">
+                <input type="hidden" asp-for="ReturnUrl" />
                 <div class="form-group row w-50">
                     <input type="text" class="form-control" id="employeeId" placeholder="Badge Number" asp-for="EmployeeId"/>
                     <span asp-validation-for="EmployeeId" class="text-danger"></span>

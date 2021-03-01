@@ -5,7 +5,7 @@ namespace CafeeMaker.Web.Models {
     public class LoginViewModel {
 
         [Required]
-        public int EmployeeId { get; set; }
+        public int? EmployeeId { get; set; }
         public string ReturnUrl { get; set; }
 
     }

@@ -28,15 +28,17 @@ namespace CafeeMaker.Web.Test.Controllers {
                 LastName = "b"
             }));
 
-            var controller = new LoginController(loginService, employeeService);
+            const string redirectUrl = "/somewhere";
+
+            var controller = new AccountController(loginService, employeeService);
 
             // Act
-            var result = await controller.Login(new LoginViewModel {EmployeeId = employeeId});
+            var result = await controller.Login(new LoginViewModel {EmployeeId = employeeId, ReturnUrl = redirectUrl});
 
             // Assert
             await loginService.Received().SignInAsync(Arg.Any<IEnumerable<Claim>>());
             var res = Assert.IsType<RedirectResult>(result);
-            Assert.Equal("/", res.Url);
+            Assert.Equal(redirectUrl, res.Url);
         }
 
         [Fact]
@@ -49,7 +51,7 @@ namespace CafeeMaker.Web.Test.Controllers {
             var employeeService = Substitute.For<IEmployeeService>();
             employeeService.GetEmployeeByIdAsync(employeeId).Returns(Task.FromResult<EmployeeDto>(null));
 
-            var controller = new LoginController(loginService, employeeService);
+            var controller = new AccountController(loginService, employeeService);
 
             // Act
             var result = await controller.Login(new LoginViewModel {EmployeeId = employeeId});
@@ -65,11 +67,11 @@ namespace CafeeMaker.Web.Test.Controllers {
             var loginService = Substitute.For<ILoginService>();
             var employeeService = Substitute.For<IEmployeeService>();
 
-            var controller = new LoginController(loginService, employeeService);
+            var controller = new AccountController(loginService, employeeService);
             controller.ModelState.AddModelError("EmployeeId", "The employee id is required.");
 
             // Act
-            var result = await controller.Login(null);
+            var result = await controller.Login(new LoginViewModel());
 
             // Assert
             await loginService.DidNotReceive().SignInAsync(Arg.Any<IEnumerable<Claim>>());
@@ -82,7 +84,7 @@ namespace CafeeMaker.Web.Test.Controllers {
             var loginService = Substitute.For<ILoginService>();
             var employeeService = Substitute.For<IEmployeeService>();
 
-            var controller = new LoginController(loginService, employeeService);
+            var controller = new AccountController(loginService, employeeService);
 
             // Act
             var result = await controller.Logout();
