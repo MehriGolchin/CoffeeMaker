@@ -1,4 +1,3 @@
-html, body, #root, .container {
+html, body, main, .container {
   height: 100%;
-  background-color: rebeccapurple;
 }
