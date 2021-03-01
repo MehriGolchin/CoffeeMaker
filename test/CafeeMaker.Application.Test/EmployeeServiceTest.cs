@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using CafeeMaker.Domain;
 using CafeeMaker.Domain.Entities;
 using NSubstitute;
 using Xunit;

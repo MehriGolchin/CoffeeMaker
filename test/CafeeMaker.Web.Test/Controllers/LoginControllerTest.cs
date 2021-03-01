@@ -35,9 +35,8 @@ namespace CafeeMaker.Web.Test.Controllers {
 
             // Assert
             await loginService.Received().SignInAsync(Arg.Any<IEnumerable<Claim>>());
-            var res = Assert.IsType<RedirectToActionResult>(result);
-            Assert.Equal("Index", res.ActionName);
-            Assert.Equal("Home", res.ControllerName);
+            var res = Assert.IsType<RedirectResult>(result);
+            Assert.Equal("/", res.Url);
         }
 
         [Fact]
