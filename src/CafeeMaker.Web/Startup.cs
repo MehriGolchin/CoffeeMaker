@@ -1,15 +1,18 @@
+using System.IO;
 using CafeeMaker.Application;
-using CafeeMaker.Domain.Entities;
+using CafeeMaker.Domain;
 using CafeeMaker.Infrastructure.Repositories;
 using CafeeMaker.Service;
 using CafeeMaker.Web.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 
 namespace CafeeMaker.Web {
@@ -30,16 +33,24 @@ namespace CafeeMaker.Web {
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/build"; });
             
             services.AddDbContext<CafeeMakerDbContext>(builder => 
-                builder.UseNpgsql(Configuration.GetConnectionString("Default")));
+                builder
+                    .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+                    .UseNpgsql(Configuration.GetConnectionString("Default")));
 
             services.AddHttpContextAccessor();
-            
+
             services.AddScoped<IEmployeeRepository, EmployeeRepository>()
                 .AddScoped<IEmployeeService, EmployeeService>()
-                .AddScoped<ILoginService, LoginService>();
+                .AddScoped<ILoginService, LoginService>()
+                .AddScoped<IDrinkRepository, DrinkRepository>()
+                .AddScoped<IDrinkService, DrinkService>()
+                .AddScoped<IPreferenceRepository, PreferenceRepository>()
+                .AddScoped<IPreferenceService, PreferenceService>();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie();
+                .AddCookie(options => {
+                    options.LoginPath = "/login";
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,7 +64,13 @@ namespace CafeeMaker.Web {
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            
+            app.UseStaticFiles(new StaticFileOptions {
+                FileProvider = new CompositeFileProvider(
+                    new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "ClientApp/node_modules/bootstrap")),
+                    new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "wwwroot")))
+            });
+            
             app.UseSpaStaticFiles();
 
             app.UseRouting();
