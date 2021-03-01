@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using CafeeMaker.Domain.Entities;
+using CafeeMaker.Domain;
 using CafeeMaker.Service;
 using CafeeMaker.Service.Dtos;
 

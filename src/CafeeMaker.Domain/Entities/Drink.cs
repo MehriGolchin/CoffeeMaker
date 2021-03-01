@@ -7,14 +7,16 @@ namespace CafeeMaker.Domain.Entities {
         private Drink() {
         }
         
-        public Drink(int id, string name, IEnumerable<DrinkIngredient> ingredients) {
-            Id = id;
+        public Drink(int drinkId, string name, string image, IEnumerable<DrinkIngredient> ingredients) {
+            DrinkId = drinkId;
             Name = name;
+            Image = image;
             Ingredients = ingredients;
         }
 
-        public int Id { get; }
+        public int DrinkId { get; }
         public string Name { get; }
+        public string Image { get; }
         public IEnumerable<DrinkIngredient> Ingredients { get; }
 
     }

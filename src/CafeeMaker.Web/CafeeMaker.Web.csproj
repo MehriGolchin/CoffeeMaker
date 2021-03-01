@@ -22,6 +22,7 @@
     <ItemGroup>
         <!-- Don't publish the SPA source files, but do show them in the project files list -->
         <Content Remove="$(SpaRoot)**" />
+        <Content Include="ClientApp\tsconfig.json" />
         <None Remove="$(SpaRoot)**" />
         <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
     </ItemGroup>
@@ -30,6 +31,23 @@
       <ProjectReference Include="..\CafeeMaker.Application\CafeeMaker.Application.csproj" />
       <ProjectReference Include="..\CafeeMaker.Infrastructure\CafeeMaker.Infrastructure.csproj" />
       <ProjectReference Include="..\CafeeMaker.Service\CafeeMaker.Service.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <TypeScriptCompile Include="ClientApp\src\App.tsx" />
+      <TypeScriptCompile Include="ClientApp\src\components\DrinkList.tsx" />
+      <TypeScriptCompile Include="ClientApp\src\components\Enjoy.tsx" />
+      <TypeScriptCompile Include="ClientApp\src\components\Order.tsx" />
+      <TypeScriptCompile Include="ClientApp\src\constants.ts" />
+      <TypeScriptCompile Include="ClientApp\src\index.tsx" />
+      <TypeScriptCompile Include="ClientApp\src\services\drinkService.ts" />
+      <TypeScriptCompile Include="ClientApp\src\services\HttpClient.ts" />
+      <TypeScriptCompile Include="ClientApp\src\services\orderService.ts" />
+      <TypeScriptCompile Include="ClientApp\src\services\preferenceService.ts" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="wwwroot\img" />
     </ItemGroup>
 
     <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
