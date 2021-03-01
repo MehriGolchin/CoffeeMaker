@@ -1,16 +1,17 @@
 @model LoginViewModel
 
 <div className="h-100 d-flex justify-content-center align-items-center">
-    <div className="card w-75 mb-5">
+    <div className="card mb-5">
         <div className="card-body">
-        <h3>Login</h3>
+            <h3>Login</h3>
             <form asp-action="Login">
-                <div class="form-group">
+                <div class="form-group row w-50">
                     <input type="text" class="form-control" id="employeeId" placeholder="Badge Number" asp-for="EmployeeId"/>
                     <span asp-validation-for="EmployeeId" class="text-danger"></span>
                 </div>
                 <button type="submit" class="btn btn-primary">Login</button>
             </form>
-            </div>
+        </div>
     </div>
 </div>
+

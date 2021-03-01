@@ -25,12 +25,6 @@ namespace CafeeMaker.Infrastructure.Repositories {
                 .Include(di => di.Ingredient)
                 .Where(di => di.DrinkId == drinkId)
                 .ToListAsync();
-
-            // var query = (from di in _dbContext.DrinkIngredients
-            //         join i in _dbContext.Ingredient on di.IngredientId equals i.IngredientId
-            //     where di.DrinkId == drinkId
-            //         select new {di.IngredientId, i.Name});
-            // return await query.ToListAsync();
         }
 
     }

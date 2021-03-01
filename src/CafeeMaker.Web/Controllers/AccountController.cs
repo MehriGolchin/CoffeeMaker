@@ -20,7 +20,7 @@ namespace CafeeMaker.Web.Controllers {
         }
 
         [HttpGet]
-        public IActionResult Login(string returnUrl) {
+        public IActionResult Login() {
             return View();
         }
 

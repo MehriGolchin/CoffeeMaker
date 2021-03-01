@@ -1,5 +1,3 @@
-using System.Reflection.Emit;
-using System.Text.Json.Serialization;
 using CafeeMaker.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -28,8 +26,8 @@ namespace CafeeMaker.Infrastructure.Repositories {
             });
 
             modelBuilder.Entity<Employee>().HasData(
-                new {EmployeeId = 1, FirstName = "AA1", LastName = "BB1"},
-                new {EmployeeId = 2, FirstName = "AA2", LastName = "BB2"}
+                new {EmployeeId = 100, FirstName = "AA1", LastName = "BB1"},
+                new {EmployeeId = 200, FirstName = "AA2", LastName = "BB2"}
             );
             
             modelBuilder.Entity<Drink>(builder => {
@@ -42,12 +40,15 @@ namespace CafeeMaker.Infrastructure.Repositories {
                 builder.HasKey(d => d.DrinkId);
             });
             
-            modelBuilder.Entity<Drink>().HasData(
-                new {DrinkId = 1, Name = "Thé", Image = "/img/tea.png"},
-                new {DrinkId = 2, Name = "Café", Image = "/img/coffee.png"},
-                new {DrinkId = 3, Name = "Chocolat", Image = "/img/chocolate.png"}
-            );
+            modelBuilder.Entity<Drink>()
+                .HasMany(d => d.Ingredients);
             
+            modelBuilder.Entity<Drink>().HasData(
+                new {DrinkId = 1, Name = "Thé", Image = "/img/tea1.png"},
+                new {DrinkId = 2, Name = "Café", Image = "/img/coffee1.png"},
+                new {DrinkId = 3, Name = "Chocolat", Image = "/img/chocolate1.png"}
+            );
+
             modelBuilder.Entity<Ingredient>(builder => {
                 builder.ToTable("ingredient");
 
@@ -64,7 +65,8 @@ namespace CafeeMaker.Infrastructure.Repositories {
                 new {IngredientId = 4, Name = "Lait"},
                 new {IngredientId = 5, Name = "Crème fouettée"},
                 new {IngredientId = 6, Name = "Eau froide"},
-                new {IngredientId = 7, Name = "Café"}
+                new {IngredientId = 7, Name = "Café"},
+                new {IngredientId = 8, Name = "Chocolat"}
             );
             
             modelBuilder.Entity<DrinkIngredient>(builder => {
@@ -86,11 +88,12 @@ namespace CafeeMaker.Infrastructure.Repositories {
                 new {DrinkIngredientId = 3, DrinkId = 1, IngredientId = 3, Amount = 50},
                 new {DrinkIngredientId = 4, DrinkId = 2, IngredientId = 7, Amount = 50},
                 new {DrinkIngredientId = 5, DrinkId = 2, IngredientId = 4, Amount = 50},
-                new {DrinkIngredientId = 6, DrinkId = 2, IngredientId = 1, Amount = 20}
+                new {DrinkIngredientId = 6, DrinkId = 2, IngredientId = 1, Amount = 20},
+                new {DrinkIngredientId = 7, DrinkId = 2, IngredientId = 3, Amount = 40},
+                new {DrinkIngredientId = 8, DrinkId = 3, IngredientId = 5, Amount = 100},
+                new {DrinkIngredientId = 9, DrinkId = 3, IngredientId = 8, Amount = 100},
+                new {DrinkIngredientId = 10, DrinkId = 3, IngredientId = 3, Amount = 30}
             );
-
-            modelBuilder.Entity<Drink>()
-                .HasMany(d => d.Ingredients);
 
             modelBuilder.Entity<Preference>(builder => {
                 builder.ToTable("preference");
