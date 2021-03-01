@@ -3,21 +3,40 @@ import {DrinkIngredient, getDrinkIngredients, Mug} from "../services/drinkServic
 import {useParams} from "react-router";
 import {postOrder} from "../services/orderService";
 import classNames from "classnames";
-
+import {getPreference} from "../services/preferenceService";
 import "./Ingredient.scss";
+import {useHistory} from "react-router-dom";
 
 const editableIngredients = ["Sucre"];
 
-export const IngredientList = () => {
+export const Order = () => {
     const {drinkId} = useParams();
     const [ingredients, setIngredients] = useState<DrinkIngredient[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [sugarValue, setSugarValue] = useState();
     const [mugValue, setMugValue] = useState(Mug.small);
+    const history = useHistory();
 
     useEffect(() => {
         (async () => {
-            setIngredients(await getDrinkIngredients(drinkId));
+            let baseIngredients = await getDrinkIngredients(drinkId);
+            
+            try {
+                const preferences = await getPreference(drinkId);
+                if (preferences) {
+                    baseIngredients = baseIngredients.map(e => {
+                        const p = preferences.amounts.find(p => p.drinkIngredientId === e.drinkIngredientId);
+                        return {
+                            ...e,
+                            amount: p ? p.amount : e.amount
+                        };
+                    });
+                    setMugValue(preferences.mug);
+                }
+            }
+            catch {}
+            
+            setIngredients(baseIngredients);
             setIsLoading(false);
         })();
     }, []);
@@ -34,14 +53,16 @@ export const IngredientList = () => {
     const onStartClick = async () => {
         const amounts = ingredients.map(i => ({ 
             drinkIngredientId: i.drinkIngredientId, 
-            amount: i.ingredient.name === 'Sugar' ? sugarValue : i.amount 
+            amount: i.ingredient.name === 'Sucre' ? sugarValue : i.amount 
         }));
         
         await postOrder({
-            drinkId,
+            drinkId: parseInt(drinkId, 10),
             amounts,
             mug: mugValue
         });
+        
+        history.push("/enjoy");
     }
 
     return (
@@ -50,7 +71,6 @@ export const IngredientList = () => {
                 {isLoading ? <p>Loading</p> :
                     <div className="card-body">
                         <h2>Ingrédients</h2>
-                        <div>Input value: {mugValue}</div>
                         <hr/>
                         <form>
                             {
