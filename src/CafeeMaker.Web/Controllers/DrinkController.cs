@@ -3,9 +3,9 @@ using CafeeMaker.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CafeeMaker.Web.Api {
+namespace CafeeMaker.Web.Controllers {
 
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     public class DrinkController : ControllerBase {
 

@@ -6,6 +6,7 @@ namespace CafeeMaker.Web.Models {
 
         [Required]
         public int EmployeeId { get; set; }
+        public string ReturnUrl { get; set; }
 
     }
 

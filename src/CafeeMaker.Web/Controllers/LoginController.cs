@@ -20,7 +20,7 @@ namespace CafeeMaker.Web.Controllers {
         }
 
         [HttpGet]
-        public IActionResult Login() {
+        public IActionResult Login(string returnUrl) {
             return View();
         }
 
@@ -40,7 +40,7 @@ namespace CafeeMaker.Web.Controllers {
                 new Claim("id", employee.EmployeeId.ToString()),
             });
             
-            return RedirectToAction("Index", "Home");
+            return Redirect(model.ReturnUrl ?? "/");
         }
 
         [HttpGet]

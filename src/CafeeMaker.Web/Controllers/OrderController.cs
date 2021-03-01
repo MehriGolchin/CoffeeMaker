@@ -1,12 +1,35 @@
+using System.Security.Claims;
+using System.Threading.Tasks;
+using CafeeMaker.Service;
+using CafeeMaker.Service.Dtos;
+using CafeeMaker.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CafeeMaker.Web.Controllers {
 
-    public class OrderController : Controller {
+    [Authorize]
+    [Route("api/[controller]")]
+    public class OrderController : ControllerBase {
 
-        // GET
-        public IActionResult Index() {
-            return View();
+        private readonly IPreferenceService _preferenceService;
+        
+        public OrderController(IPreferenceService preferenceService) {
+            _preferenceService = preferenceService;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SaveOrder([FromBody] OrderRequest request) {
+            var employeeId = int.Parse(User.FindFirstValue("id"));
+            
+            await _preferenceService.SavePreferenceAsync(new PreferenceDto {
+                EmployeeId = employeeId,
+                DrinkId = request.DrinkId,
+                Amounts = request.Amounts,
+                Mug = request.Mug
+            });
+
+            return Ok(true);
         }
 
     }
