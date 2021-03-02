@@ -11,7 +11,7 @@ using NSubstitute;
 using Xunit;
 
 namespace CafeeMaker.Web.Test.Controllers {
-
+    
     public class LoginControllerTest {
 
         [Fact]
