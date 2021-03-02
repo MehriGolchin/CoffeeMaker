@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using CafeeMaker.Infrastructure;
@@ -14,18 +15,29 @@ namespace CafeeMaker.Web.Controllers {
     public class OrderController : ControllerBase {
 
         private readonly IPreferenceService _preferenceService;
+        private readonly IDrinkService _drinkService;
         private readonly ICoffeeMachine _coffeeMachine;
         
-        public OrderController(IPreferenceService preferenceService, ICoffeeMachine coffeeMachine) {
+        public OrderController(IPreferenceService preferenceService, ICoffeeMachine coffeeMachine, IDrinkService drinkService) {
             _preferenceService = preferenceService;
             _coffeeMachine = coffeeMachine;
+            _drinkService = drinkService;
         }
 
         [HttpPost]
         public async Task<IActionResult> SaveOrder([FromBody] OrderRequest request) {
             var employeeId = int.Parse(User.FindFirstValue("id"));
 
-            await _coffeeMachine.MakeDrink(new DrinkRequest(new DrinkRequest.Ingredient[0], request.Mug));
+            var ingredients = await _drinkService.GetDrinkIngredientByIdAsync(request.DrinkId);
+            var drinkRequest = new DrinkRequest(
+                ingredients.Select(i => new DrinkRequest.Ingredient(
+                    i.Ingredient.Name,
+                    request.GetIngredientAmountOrDefault(i.DrinkIngredientId, i.Amount)
+                )),
+                request.Mug
+            );
+            
+            await _coffeeMachine.MakeDrink(drinkRequest);
             
             await _preferenceService.SavePreferenceAsync(new PreferenceDto {
                 EmployeeId = employeeId,
