@@ -7,7 +7,7 @@ namespace CafeeMaker.Infrastructure {
 
         public async Task MakeDrink(DrinkRequest request) {
             Console.WriteLine("Making drink...");
-            await Task.Delay(3000);
+            await Task.Delay(1000);
             Console.WriteLine("Enjoy :)");
         }
 
