@@ -17,7 +17,7 @@ docker pull postgres
 To launch container:
 
 ```
-docker run --name postgresql-container -p 5432:5432 -e POSTGRES_PASSWORD=somePassword -d postgres
+docker run --name postgresql-container -p 5432:5432 -e POSTGRES_PASSWORD=123456 -d postgres
 ```
 
 To Verify the new container created (Ensure the docker container is up and running):
